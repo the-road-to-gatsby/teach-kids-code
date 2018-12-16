@@ -1,8 +1,12 @@
+require('dotenv').config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
+
 module.exports = {
   siteMetadata: {
     title: 'Teach Kids Code',
     description:
-      'Teack Kids Code: STEM Toys to make your children curious about coding. Everything from physical toys to online classes to teach your kids code.',
+      'Teack Kids Code: STEM Toys to make your children curious about coding. Everything from physical toys to online classes to teach your kids code ...',
     author: '@rwieruch',
   },
   plugins: [
@@ -10,8 +14,15 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: 'UA-65599459-11',
+        trackingId: process.env.GATSBY_GOOGLE_ANALYTICS,
         anonymize: true,
+      },
+    },
+    {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: process.env.GATSBY_CONTENTFUL_SPACE_ID,
+        accessToken: process.env.GATSBY_CONTENTFUL_ACCESS_TOKEN,
       },
     },
     {

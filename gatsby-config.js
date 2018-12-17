@@ -8,7 +8,7 @@ module.exports = {
     title: 'Teach Kids Code',
     description:
       'Teack Kids Code: STEM Toys to make your children curious about coding. Everything from physical toys to online classes to teach your kids code ...',
-    author: '@rwieruch',
+    author: 'teachkidscode',
   },
   plugins: [
     'gatsby-plugin-react-helmet',

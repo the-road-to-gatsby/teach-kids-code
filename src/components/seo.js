@@ -26,6 +26,7 @@ function SEO({ title, description, keywords = [], lang = 'en', meta = [] }) {
                 name: 'description',
                 content: metaDescription,
               },
+              // Facebook
               {
                 property: 'og:title',
                 content: metaTitle,
@@ -38,14 +39,12 @@ function SEO({ title, description, keywords = [], lang = 'en', meta = [] }) {
                 property: 'og:type',
                 content: 'website',
               },
+              { property: 'og:url', content: data.site.siteMetadata.siteUrl },
               {
-                name: 'twitter:card',
-                content: 'summary',
+                property: 'og:image',
+                content: `${data.site.siteMetadata.siteUrl}/facebook.png`,
               },
-              {
-                name: 'twitter:creator',
-                content: data.site.siteMetadata.author,
-              },
+              // Twitter
               {
                 name: 'twitter:title',
                 content: metaTitle,
@@ -53,6 +52,14 @@ function SEO({ title, description, keywords = [], lang = 'en', meta = [] }) {
               {
                 name: 'twitter:description',
                 content: metaDescription,
+              },
+              {
+                name: 'twitter:card',
+                content: 'summary_large_image',
+              },
+              {
+                name: 'twitter:image:src',
+                content: `${data.site.siteMetadata.siteUrl}/twitter.png`,
               },
             ]
               .concat(
@@ -80,6 +87,7 @@ const detailsQuery = graphql`
         title
         description
         author
+        siteUrl
       }
     }
   }

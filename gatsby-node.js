@@ -1,5 +1,122 @@
 const path = require('path');
 
+const KEYWORDS = [
+  'teach kids code',
+  'teach your kids to code',
+  'how to teach coding kids',
+  'coding games for kids',
+  'computer coding for kids',
+  'coding for beginners',
+  'how to teach coding',
+  'teaching kids to code',
+];
+
+const createPagesMain = (actions, template, toys, categories, materials) => {
+  actions.createPage({
+    path: `/`,
+    component: template,
+    context: {
+      keywords: [...KEYWORDS],
+      data: {
+        toys,
+        categories,
+        materials,
+        query: {
+          category: null,
+          material: null,
+          age: null,
+        },
+      },
+    },
+  });
+};
+
+const createPagesCategory = (
+  actions,
+  template,
+  toys,
+  categories,
+  materials
+) => {
+  categories.forEach(({ value }) => {
+    actions.createPage({
+      path: `/teach-kids-code-with-${value.replace(/\s/g, '-').toLowerCase()}`,
+      component: template,
+      context: {
+        keywords: [`teach kids code with ${value.toLowerCase()}`, ...KEYWORDS],
+        data: {
+          toys,
+          categories,
+          materials,
+          query: {
+            category: value,
+            material: null,
+            age: null,
+          },
+        },
+      },
+    });
+  });
+};
+
+const createPagesMaterial = (
+  actions,
+  template,
+  toys,
+  categories,
+  materials
+) => {
+  materials.forEach(({ value }) => {
+    actions.createPage({
+      path: `/teach-kids-code-with-toys-made-from-${value
+        .replace(/\s/g, '-')
+        .toLowerCase()}`,
+      component: template,
+      context: {
+        keywords: [
+          `teach kids code with toys made from ${value.toLowerCase()}`,
+          ...KEYWORDS,
+        ],
+        data: {
+          toys,
+          categories,
+          materials,
+          query: {
+            category: null,
+            material: value,
+            age: null,
+          },
+        },
+      },
+    });
+  });
+};
+
+const createPagesAge = (actions, template, toys, categories, materials) => {
+  new Array(22)
+    .fill(0)
+    .map((v, i) => v + i)
+    .forEach(value => {
+      actions.createPage({
+        path: `/teach-kids-code-from-age-${value}-years`,
+        component: template,
+        context: {
+          keywords: [`teach kids code from age ${value} years`, ...KEYWORDS],
+          data: {
+            toys,
+            categories,
+            materials,
+            query: {
+              category: null,
+              material: null,
+              age: value,
+            },
+          },
+        },
+      });
+    });
+};
+
 exports.createPages = ({ graphql, actions }) => {
   return new Promise((resolve, reject) => {
     resolve(
@@ -60,35 +177,10 @@ exports.createPages = ({ graphql, actions }) => {
           return result;
         }, []);
 
-        actions.createPage({
-          path: `/`,
-          component: template,
-          context: {
-            title: 'Teach Kids Code',
-            description:
-              'Teack Kids Code: STEM Toys to make your children curious about coding. Everything from physical toys to online classes to teach your kids code ...',
-            keywords: [
-              'teach kids code',
-              'teach your kids to code',
-              'how to teach coding kids',
-              'coding games for kids',
-              'computer coding for kids',
-              'coding for beginners',
-              'how to teach coding',
-              'teaching kids to code',
-            ],
-            data: {
-              toys,
-              categories,
-              materials,
-              query: {
-                category: null,
-                material: null,
-                age: null,
-              },
-            },
-          },
-        });
+        createPagesMain(actions, template, toys, categories, materials);
+        createPagesCategory(actions, template, toys, categories, materials);
+        createPagesMaterial(actions, template, toys, categories, materials);
+        createPagesAge(actions, template, toys, categories, materials);
       })
     );
   });

@@ -65,6 +65,7 @@ export default ({ pageContext }) => {
             <label>
               <div>Age</div>
               <Input
+                value={age}
                 onChange={(e, { value }) => setAge(value)}
                 placeholder="Kid's Age"
                 type="number"

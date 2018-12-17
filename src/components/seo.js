@@ -7,6 +7,7 @@ function SEO({ title, description, keywords = [], lang = 'en', meta = [] }) {
     <StaticQuery
       query={detailsQuery}
       render={data => {
+        const metaTitle = title || data.site.siteMetadata.title;
         const metaDescription =
           description || data.site.siteMetadata.description;
 
@@ -15,7 +16,7 @@ function SEO({ title, description, keywords = [], lang = 'en', meta = [] }) {
             htmlAttributes={{
               lang,
             }}
-            title={title}
+            title={metaTitle}
             meta={[
               {
                 name: 'google-site-verification',
@@ -27,7 +28,7 @@ function SEO({ title, description, keywords = [], lang = 'en', meta = [] }) {
               },
               {
                 property: 'og:title',
-                content: title,
+                content: metaTitle,
               },
               {
                 property: 'og:description',
@@ -47,7 +48,7 @@ function SEO({ title, description, keywords = [], lang = 'en', meta = [] }) {
               },
               {
                 name: 'twitter:title',
-                content: title,
+                content: metaTitle,
               },
               {
                 name: 'twitter:description',

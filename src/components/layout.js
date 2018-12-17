@@ -6,7 +6,7 @@ import 'semantic-ui-css/semantic.min.css';
 
 import './layout.css';
 
-import Newsletter from '../components//newsletter';
+// import Newsletter from '../components//newsletter';
 
 // TODO remove with Gatsby upgrade
 setConfig({ pureSFC: true });
@@ -34,10 +34,10 @@ const Layout = ({ children }) => (
         >
           {children}
         </div>
-        <Newsletter />
       </Fragment>
     )}
   />
 );
+// <Newsletter />
 
 export default Layout;

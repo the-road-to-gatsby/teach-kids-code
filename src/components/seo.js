@@ -18,6 +18,10 @@ function SEO({ title, description, keywords = [], lang = 'en', meta = [] }) {
             title={title}
             meta={[
               {
+                name: 'google-site-verification',
+                content: process.env.GATSBY_GOOGLE_SITE_VERIFICATION,
+              },
+              {
                 name: 'description',
                 content: metaDescription,
               },

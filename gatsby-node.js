@@ -135,6 +135,8 @@ exports.createPages = ({ graphql, actions }) => {
                   materials
                   minAge
                   maxAge
+                  priceDecimal
+                  comment
                 }
               }
             }

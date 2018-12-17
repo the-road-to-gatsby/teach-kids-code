@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Grid, Dropdown, Input } from 'semantic-ui-react';
+import { Grid, Dropdown, Input, Card, Icon } from 'semantic-ui-react';
 import sortBy from 'lodash.sortby';
 
 import logo from '../images/logo.svg';
@@ -12,21 +12,6 @@ export default ({ pageContext }) => {
   const [category, setCategory] = useState(query.category);
   const [material, setMaterial] = useState(query.material);
   const [age, setAge] = useState(query.age);
-  const [ageSorted, setAgeSorted] = useState(null);
-
-  const handleAgeSort = () => {
-    if (!ageSorted) {
-      setAgeSorted('ascending');
-    }
-
-    if (ageSorted === 'ascending') {
-      setAgeSorted('descending');
-    }
-
-    if (ageSorted === 'descending') {
-      setAgeSorted(null);
-    }
-  };
 
   return (
     <Layout>
@@ -75,67 +60,66 @@ export default ({ pageContext }) => {
         </Grid.Row>
       </Grid>
 
-      <Table sortable basic="very">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell singleLine />
-            <Table.HeaderCell singleLine>Name</Table.HeaderCell>
-            <Table.HeaderCell singleLine>Category</Table.HeaderCell>
-            <Table.HeaderCell singleLine>Material</Table.HeaderCell>
-            <Table.HeaderCell
-              singleLine
-              sorted={ageSorted}
-              onClick={handleAgeSort}
-            >
-              Age
-            </Table.HeaderCell>
-            <Table.HeaderCell singleLine>Comment</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
+      <Card.Group style={{ margin: '20px 0' }}>
+        {sortBy(toys, toy => toy.minAge)
+          .filter(toy => (category ? toy.categories.includes(category) : true))
+          .filter(toy => (material ? toy.materials.includes(material) : true))
+          .filter(toy => {
+            if (!age) {
+              return true;
+            }
 
-        <Table.Body>
-          {(ageSorted
-            ? sortBy(toys, toy =>
-                ageSorted === 'ascending' ? toy.minAge : toy.minAge * -1
-              )
-            : toys
-          )
-            .filter(toy =>
-              category ? toy.categories.includes(category) : true
-            )
-            .filter(toy => (material ? toy.materials.includes(material) : true))
-            .filter(toy => (age ? toy.minAge < age && toy.maxAge > age : true))
-            .map(toy => (
-              <Table.Row key={toy.url}>
-                <Table.Cell>
-                  <a href={toy.url}>
-                    <img src={toy.imgSrcOne} border="0" alt={toy.name} />
-                    <img
-                      src={toy.imgSrcTwo}
-                      width="1"
-                      height="1"
-                      border="0"
-                      alt={toy.name}
-                    />
-                  </a>
-                </Table.Cell>
-                <Table.Cell>
+            if (toy.maxAge) {
+              return toy.minAge <= age && toy.maxAge >= age;
+            }
+
+            return toy.minAge <= age;
+          })
+          .map(toy => (
+            <Card key={toy.url}>
+              <a href={toy.url} style={{ margin: '0 auto' }}>
+                <img src={toy.imgSrcOne} border="0" alt={toy.name} />
+                <img
+                  src={toy.imgSrcTwo}
+                  width="1"
+                  height="1"
+                  border="0"
+                  alt={toy.name}
+                />
+              </a>
+              <Card.Content>
+                <Card.Header>
                   <a href={toy.url}>{toy.name}</a>
-                </Table.Cell>
-                <Table.Cell singleLine>
-                  {toy.categories.map(v => v.toUpperCase()).join(', ')}
-                </Table.Cell>
-                <Table.Cell singleLine>
-                  {toy.materials.map(v => v.toUpperCase()).join(', ')}
-                </Table.Cell>
-                <Table.Cell singleLine>
-                  {toy.minAge} - {toy.maxAge}
-                </Table.Cell>
-                <Table.Cell>{toy.comment}</Table.Cell>
-              </Table.Row>
-            ))}
-        </Table.Body>
-      </Table>
+                </Card.Header>
+                <Card.Meta>
+                  <span>{toy.comment}</span>
+                </Card.Meta>
+              </Card.Content>
+              <Card.Content extra>
+                <Icon name="user" />
+                {toy.maxAge ? (
+                  <span>
+                    From {toy.minAge} to {toy.maxAge} years old.
+                  </span>
+                ) : (
+                  <span>From {toy.minAge}+ years old.</span>
+                )}
+              </Card.Content>
+              <Card.Content extra>
+                <Icon name="money" />
+                {toy.priceDecimal}
+              </Card.Content>
+              <Card.Content extra>
+                <Icon name="game" />
+                {toy.categories.map(v => v.toUpperCase()).join(', ')}
+              </Card.Content>
+              <Card.Content extra>
+                <Icon name="tree" />
+                {toy.materials.map(v => v.toUpperCase()).join(', ')}
+              </Card.Content>
+            </Card>
+          ))}
+      </Card.Group>
 
       <SubmitToy />
 
